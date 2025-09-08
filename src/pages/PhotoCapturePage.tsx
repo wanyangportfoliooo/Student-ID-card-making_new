@@ -12,6 +12,7 @@ const PhotoCapturePage: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [cameraKey, setCameraKey] = useState(0);
 
   // Initialize camera when component mounts
   useEffect(() => {
@@ -101,6 +102,7 @@ const PhotoCapturePage: React.FC = () => {
     // 清除 video 元素的 srcObject
     if (videoRef.current) {
       videoRef.current.srcObject = null;
+      videoRef.current.load(); // 強制重新載入 video 元素
     }
   };
 
@@ -172,11 +174,13 @@ const PhotoCapturePage: React.FC = () => {
     stopCamera();
     // 清除預覽圖片
     setCapturedImage(null);
+    // 強制重新渲染相機組件
+    setCameraKey(prev => prev + 1);
     // 等待一下再重新啟動相機
     setTimeout(() => {
       console.log('Restarting camera after retake...');
       startCamera();
-    }, 200);
+    }, 300);
   };
 
   if (error) {
@@ -323,6 +327,7 @@ const PhotoCapturePage: React.FC = () => {
                   </div>
                 ) : (
                   <video
+                    key={cameraKey}
                     ref={videoRef}
                     autoPlay
                     playsInline
