@@ -140,6 +140,8 @@ const PhotoCapturePage: React.FC = () => {
 
   const retakePhoto = () => {
     setCapturedImage(null);
+    // 重新啟動相機
+    startCamera();
   };
 
   if (error) {
