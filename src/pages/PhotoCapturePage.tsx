@@ -21,6 +21,14 @@ const PhotoCapturePage: React.FC = () => {
     };
   }, [facingMode]);
 
+  // Restart camera when retaking photo
+  useEffect(() => {
+    if (capturedImage === null && !isLoading) {
+      console.log('capturedImage is null, restarting camera...');
+      startCamera();
+    }
+  }, [capturedImage, isLoading]);
+
   const startCamera = async () => {
     try {
       console.log('Starting camera...');
@@ -36,6 +44,7 @@ const PhotoCapturePage: React.FC = () => {
       if (streamRef.current) {
         console.log('Stopping existing stream...');
         streamRef.current.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
       }
 
       // Request camera access
@@ -54,11 +63,22 @@ const PhotoCapturePage: React.FC = () => {
       if (videoRef.current) {
         console.log('Setting video srcObject...');
         videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-        console.log('Video playing:', videoRef.current.readyState);
+        
+        // Wait for video to be ready
+        videoRef.current.onloadedmetadata = () => {
+          console.log('Video metadata loaded');
+          videoRef.current?.play().then(() => {
+            console.log('Video playing successfully');
+            setIsLoading(false);
+          }).catch((playErr) => {
+            console.error('Video play error:', playErr);
+            setIsLoading(false);
+          });
+        };
+      } else {
+        setIsLoading(false);
       }
 
-      setIsLoading(false);
       console.log('Camera started successfully');
     } catch (err) {
       console.error('Camera error:', err);
@@ -155,14 +175,10 @@ const PhotoCapturePage: React.FC = () => {
 
   const retakePhoto = async () => {
     console.log('Retaking photo...');
-    setCapturedImage(null);
     // 強制停止相機
     stopCamera();
-    // 等待一下再重新啟動
-    setTimeout(() => {
-      console.log('Restarting camera...');
-      startCamera();
-    }, 100);
+    // 清除預覽圖片
+    setCapturedImage(null);
   };
 
   if (error) {
