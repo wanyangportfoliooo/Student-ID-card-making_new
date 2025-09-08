@@ -23,6 +23,7 @@ const PhotoCapturePage: React.FC = () => {
 
   const startCamera = async () => {
     try {
+      console.log('Starting camera...');
       setIsLoading(true);
       setError('');
 
@@ -33,10 +34,12 @@ const PhotoCapturePage: React.FC = () => {
 
       // Stop any existing stream
       if (streamRef.current) {
+        console.log('Stopping existing stream...');
         streamRef.current.getTracks().forEach(track => track.stop());
       }
 
       // Request camera access
+      console.log('Requesting camera access...');
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           width: { ideal: 1280 },
@@ -45,14 +48,18 @@ const PhotoCapturePage: React.FC = () => {
         }
       });
 
+      console.log('Camera stream obtained:', stream);
       streamRef.current = stream;
 
       if (videoRef.current) {
+        console.log('Setting video srcObject...');
         videoRef.current.srcObject = stream;
         await videoRef.current.play();
+        console.log('Video playing:', videoRef.current.readyState);
       }
 
       setIsLoading(false);
+      console.log('Camera started successfully');
     } catch (err) {
       console.error('Camera error:', err);
       setIsLoading(false);
@@ -70,9 +77,17 @@ const PhotoCapturePage: React.FC = () => {
   };
 
   const stopCamera = () => {
+    console.log('Stopping camera...');
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current.getTracks().forEach(track => {
+        track.stop();
+        console.log('Stopped track:', track.kind);
+      });
       streamRef.current = null;
+    }
+    // 清除 video 元素的 srcObject
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
     }
   };
 
@@ -138,10 +153,16 @@ const PhotoCapturePage: React.FC = () => {
     }
   };
 
-  const retakePhoto = () => {
+  const retakePhoto = async () => {
+    console.log('Retaking photo...');
     setCapturedImage(null);
-    // 重新啟動相機
-    startCamera();
+    // 強制停止相機
+    stopCamera();
+    // 等待一下再重新啟動
+    setTimeout(() => {
+      console.log('Restarting camera...');
+      startCamera();
+    }, 100);
   };
 
   if (error) {
