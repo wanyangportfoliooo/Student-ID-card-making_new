@@ -275,6 +275,7 @@ const PhotoCapturePage: React.FC = () => {
                   <button 
                     onClick={retakePhoto} 
                     className="w-8 h-8 bg-red-500/80 rounded-full flex items-center justify-center hover:bg-red-600/80 transition-colors"
+                    aria-label="Cancel and retake photo"
                   >
                     <X className="w-4 h-4 text-white" />
                   </button>
@@ -313,6 +314,7 @@ const PhotoCapturePage: React.FC = () => {
                     playsInline
                     muted
                     className="w-full h-full object-cover"
+                    style={{ WebkitPlaysinline: 'true' }}
                   />
                 )}
                 
@@ -321,12 +323,14 @@ const PhotoCapturePage: React.FC = () => {
                   <button 
                     onClick={triggerFileUpload} 
                     className="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center"
+                    aria-label="Upload photo from file"
                   >
                     <span className="text-white text-sm">📁</span>
                   </button>
                   <button 
                     onClick={toggleCamera} 
                     className="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center"
+                    aria-label="Switch camera (front/back)"
                   >
                     <RefreshCw className="w-4 h-4 text-white" />
                   </button>

@@ -9,7 +9,7 @@ import IDCardPreviewPage from './pages/IDCardPreviewPage';
 const App: React.FC = () => {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100">
         <Routes>
           <Route path="/" element={<Navigate to="/LandingPage" replace />} />
           <Route path="/LandingPage" element={<LandingPage />} />
@@ -17,7 +17,7 @@ const App: React.FC = () => {
           <Route path="/PersonalInformation" element={<PersonalInformationPage />} />
           <Route path="/IDCardPreview" element={<IDCardPreviewPage />} />
         </Routes>
-      </div>
+    </div>
     </Router>
   );
 };
