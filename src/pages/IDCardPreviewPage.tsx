@@ -340,7 +340,7 @@ const IDCardPreviewPage: React.FC = () => {
             <button
               onClick={handleDownload}
               disabled={isDownloading}
-              className={`w-full bg-black text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-gray-900 transition-colors duration-200 ${
+              className={`w-full bg-pink-500 text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-pink-600 transition-colors duration-200 ${
                 isDownloading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >

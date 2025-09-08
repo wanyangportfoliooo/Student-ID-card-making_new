@@ -97,7 +97,7 @@ const PersonalInformationPage: React.FC = () => {
             <button
               onClick={handleNext}
               disabled={!canProceed}
-              className={`w-full bg-black text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-gray-900 transition-colors duration-200 mb-4 ${
+              className={`w-full bg-pink-500 text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-pink-600 transition-colors duration-200 mb-4 ${
                 !canProceed ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >

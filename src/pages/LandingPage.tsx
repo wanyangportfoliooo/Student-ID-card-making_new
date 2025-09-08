@@ -39,7 +39,7 @@ const LandingPage: React.FC = () => {
 
           <button
             onClick={handleStartClick}
-            className="w-full bg-black text-white py-3 sm:py-4 px-6 rounded-none font-medium text-base sm:text-lg hover:bg-gray-900 transition-colors duration-200 mb-6 sm:mb-8"
+            className="w-full bg-pink-500 text-white py-3 sm:py-4 px-6 rounded-none font-medium text-base sm:text-lg hover:bg-pink-600 transition-colors duration-200 mb-6 sm:mb-8"
           >
             Receive your AI Student ID
           </button>

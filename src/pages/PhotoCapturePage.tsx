@@ -219,7 +219,7 @@ const PhotoCapturePage: React.FC = () => {
             <div className="space-y-4">
               <button
                 onClick={triggerFileUpload}
-                className="w-full bg-blue-600 text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-blue-700 transition-colors duration-200"
+                className="w-full bg-pink-500 text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-pink-600 transition-colors duration-200"
               >
                 📁 Upload Photo Instead
               </button>
@@ -366,7 +366,7 @@ const PhotoCapturePage: React.FC = () => {
               <button
                 onClick={capturePhoto}
                 disabled={isLoading}
-                className="w-full bg-black text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-gray-900 transition-colors duration-200 disabled:opacity-50"
+                className="w-full bg-pink-500 text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-pink-600 transition-colors duration-200 disabled:opacity-50"
               >
                 {isLoading ? 'Starting Camera...' : 'Capture Photo'}
               </button>
