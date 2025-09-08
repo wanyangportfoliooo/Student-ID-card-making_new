@@ -13,6 +13,7 @@ const PhotoCapturePage: React.FC = () => {
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [cameraKey, setCameraKey] = useState(0);
+  const [isRetaking, setIsRetaking] = useState(false);
 
   // Initialize camera when component mounts
   useEffect(() => {
@@ -59,21 +60,35 @@ const PhotoCapturePage: React.FC = () => {
         videoRef.current.srcObject = stream;
         
         // Wait for video to be ready
-        videoRef.current.onloadedmetadata = () => {
-          console.log('Video metadata loaded');
-          videoRef.current?.play().then(() => {
-            console.log('Video playing successfully');
+        return new Promise<void>((resolve, reject) => {
+          if (!videoRef.current) {
+            reject(new Error('Video element not found'));
+            return;
+          }
+
+          videoRef.current.onloadedmetadata = () => {
+            console.log('Video metadata loaded');
+            videoRef.current?.play().then(() => {
+              console.log('Video playing successfully');
+              setIsLoading(false);
+              resolve();
+            }).catch((playErr) => {
+              console.error('Video play error:', playErr);
+              setIsLoading(false);
+              reject(playErr);
+            });
+          };
+
+          videoRef.current.onerror = (err) => {
+            console.error('Video error:', err);
             setIsLoading(false);
-          }).catch((playErr) => {
-            console.error('Video play error:', playErr);
-            setIsLoading(false);
-          });
-        };
+            reject(err);
+          };
+        });
       } else {
         setIsLoading(false);
+        throw new Error('Video element not found');
       }
-
-      console.log('Camera started successfully');
     } catch (err) {
       console.error('Camera error:', err);
       setIsLoading(false);
@@ -87,6 +102,7 @@ const PhotoCapturePage: React.FC = () => {
           setError('Camera unavailable. Please upload a photo instead.');
         }
       }
+      throw err;
     }
   };
 
@@ -170,17 +186,29 @@ const PhotoCapturePage: React.FC = () => {
 
   const retakePhoto = async () => {
     console.log('Retaking photo...');
+    setIsRetaking(true);
+    
     // 強制停止相機
     stopCamera();
+    
     // 清除預覽圖片
     setCapturedImage(null);
+    
     // 強制重新渲染相機組件
     setCameraKey(prev => prev + 1);
-    // 等待一下再重新啟動相機
-    setTimeout(() => {
+    
+    // 等待更長時間確保相機完全停止
+    setTimeout(async () => {
       console.log('Restarting camera after retake...');
-      startCamera();
-    }, 300);
+      try {
+        await startCamera();
+        setIsRetaking(false);
+      } catch (err) {
+        console.error('Failed to restart camera:', err);
+        setIsRetaking(false);
+        setError('Failed to restart camera. Please refresh the page.');
+      }
+    }, 500);
   };
 
   if (error) {
@@ -318,11 +346,13 @@ const PhotoCapturePage: React.FC = () => {
             ) : (
               // Camera Mode
               <>
-                {isLoading ? (
+                {isLoading || isRetaking ? (
                   <div className="absolute inset-0 flex items-center justify-center text-white">
                     <div className="text-center">
                       <Camera className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 animate-pulse" />
-                      <p className="text-sm sm:text-base">Starting camera...</p>
+                      <p className="text-sm sm:text-base">
+                        {isRetaking ? 'Restarting camera...' : 'Starting camera...'}
+                      </p>
                     </div>
                   </div>
                 ) : (
