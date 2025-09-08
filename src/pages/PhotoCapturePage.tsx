@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Camera, ArrowLeft, RefreshCw } from 'lucide-react';
+import { Camera, ArrowLeft, RefreshCw, Check, X } from 'lucide-react';
 
 const PhotoCapturePage: React.FC = () => {
   const navigate = useNavigate();
@@ -11,6 +11,7 @@ const PhotoCapturePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>('');
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
 
   // Initialize camera when component mounts
   useEffect(() => {
@@ -94,9 +95,8 @@ const PhotoCapturePage: React.FC = () => {
     // Convert to base64 image
     const imageData = canvas.toDataURL('image/jpeg', 0.8);
     
-    // Store photo in sessionStorage and navigate to next page
-    sessionStorage.setItem('capturedPhoto', imageData);
-    navigate('/PersonalInformation');
+    // Show preview instead of navigating immediately
+    setCapturedImage(imageData);
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,8 +113,7 @@ const PhotoCapturePage: React.FC = () => {
       const result = e.target?.result as string;
       if (result) {
         stopCamera();
-        sessionStorage.setItem('capturedPhoto', result);
-        navigate('/PersonalInformation');
+        setCapturedImage(result);
       }
     };
     reader.readAsDataURL(file);
@@ -130,6 +129,17 @@ const PhotoCapturePage: React.FC = () => {
 
   const handleBack = () => {
     navigate('/LandingPage');
+  };
+
+  const confirmPhoto = () => {
+    if (capturedImage) {
+      sessionStorage.setItem('capturedPhoto', capturedImage);
+      navigate('/PersonalInformation');
+    }
+  };
+
+  const retakePhoto = () => {
+    setCapturedImage(null);
   };
 
   if (error) {
@@ -227,59 +237,100 @@ const PhotoCapturePage: React.FC = () => {
             Take a photo or upload an image for your student ID card.
           </p>
 
-          {/* Camera View */}
+          {/* Camera View or Photo Preview */}
           <div className="relative aspect-square bg-gray-900 rounded-xl overflow-hidden mb-8">
-            {isLoading ? (
-              <div className="absolute inset-0 flex items-center justify-center text-white">
-                <div className="text-center">
-                  <Camera className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 animate-pulse" />
-                  <p className="text-sm sm:text-base">Starting camera...</p>
+            {capturedImage ? (
+              // Photo Preview Mode
+              <div className="relative w-full h-full">
+                <img 
+                  src={capturedImage} 
+                  alt="Captured photo" 
+                  className="w-full h-full object-cover"
+                />
+                {/* Preview Controls Overlay */}
+                <div className="absolute top-4 right-4 flex gap-2">
+                  <button 
+                    onClick={retakePhoto} 
+                    className="w-8 h-8 bg-red-500/80 rounded-full flex items-center justify-center hover:bg-red-600/80 transition-colors"
+                  >
+                    <X className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+                {/* Preview Actions */}
+                <div className="absolute bottom-4 left-4 right-4 flex gap-2">
+                  <button 
+                    onClick={retakePhoto}
+                    className="flex-1 bg-gray-600/80 text-white py-2 px-4 rounded-lg font-medium hover:bg-gray-700/80 transition-colors"
+                  >
+                    Retake
+                  </button>
+                  <button 
+                    onClick={confirmPhoto}
+                    className="flex-1 bg-green-600/80 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-700/80 transition-colors"
+                  >
+                    <Check className="w-4 h-4 inline mr-1" />
+                    Confirm
+                  </button>
                 </div>
               </div>
             ) : (
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                className="w-full h-full object-cover"
-              />
+              // Camera Mode
+              <>
+                {isLoading ? (
+                  <div className="absolute inset-0 flex items-center justify-center text-white">
+                    <div className="text-center">
+                      <Camera className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 animate-pulse" />
+                      <p className="text-sm sm:text-base">Starting camera...</p>
+                    </div>
+                  </div>
+                ) : (
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="w-full h-full object-cover"
+                  />
+                )}
+                
+                {/* Camera Controls Overlay */}
+                <div className="absolute top-4 right-4 flex gap-2">
+                  <button 
+                    onClick={triggerFileUpload} 
+                    className="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center"
+                  >
+                    <span className="text-white text-sm">📁</span>
+                  </button>
+                  <button 
+                    onClick={toggleCamera} 
+                    className="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center"
+                  >
+                    <RefreshCw className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+              </>
             )}
-            
-            {/* Camera Controls Overlay */}
-            <div className="absolute top-4 right-4 flex gap-2">
-              <button 
-                onClick={triggerFileUpload} 
-                className="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center"
-              >
-                <span className="text-white text-sm">📁</span>
-              </button>
-              <button 
-                onClick={toggleCamera} 
-                className="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center"
-              >
-                <RefreshCw className="w-4 h-4 text-white" />
-              </button>
-            </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="space-y-4">
-            <button
-              onClick={capturePhoto}
-              disabled={isLoading}
-              className="w-full bg-black text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-gray-900 transition-colors duration-200 disabled:opacity-50"
-            >
-              {isLoading ? 'Starting Camera...' : 'Capture Photo'}
-            </button>
-            
-            <button
-              onClick={triggerFileUpload}
-              className="w-full bg-gray-200 text-black py-3 px-6 rounded-xl font-medium hover:bg-gray-300 transition-colors duration-200"
-            >
-              📁 Upload Photo Instead
-            </button>
-          </div>
+          {/* Action Buttons - Only show when not in preview mode */}
+          {!capturedImage && (
+            <div className="space-y-4">
+              <button
+                onClick={capturePhoto}
+                disabled={isLoading}
+                className="w-full bg-black text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-gray-900 transition-colors duration-200 disabled:opacity-50"
+              >
+                {isLoading ? 'Starting Camera...' : 'Capture Photo'}
+              </button>
+              
+              <button
+                onClick={triggerFileUpload}
+                className="w-full bg-gray-200 text-black py-3 px-6 rounded-xl font-medium hover:bg-gray-300 transition-colors duration-200"
+              >
+                📁 Upload Photo Instead
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
