@@ -22,8 +22,17 @@ const IDCardPreviewPage: React.FC = () => {
     const savedInfo = sessionStorage.getItem('studentInfo');
     const savedPhoto = sessionStorage.getItem('capturedPhoto');
     
+    console.log('Loading from sessionStorage:');
+    console.log('savedInfo:', savedInfo);
+    console.log('savedPhoto length:', savedPhoto ? savedPhoto.length : 'null');
+    
     if (savedInfo) {
       const parsedInfo = JSON.parse(savedInfo);
+      // 確保照片也被載入
+      if (savedPhoto) {
+        parsedInfo.photo = savedPhoto;
+      }
+      console.log('Final studentInfo:', parsedInfo);
       setStudentInfo(parsedInfo);
     } else if (savedPhoto) {
       setStudentInfo(prev => ({ ...prev, photo: savedPhoto }));
@@ -147,6 +156,7 @@ const IDCardPreviewPage: React.FC = () => {
     if (studentInfo.photo) {
       const img = new Image();
       img.onload = () => {
+        console.log('Photo loaded successfully:', img.width, 'x', img.height);
         // Draw photo with proper aspect ratio
         const photoX = 20;
         const photoY = 20;
@@ -188,6 +198,12 @@ const IDCardPreviewPage: React.FC = () => {
         link.click();
         
         setIsDownloading(false);
+      };
+      img.onerror = (error) => {
+        console.error('Failed to load photo:', error);
+        console.log('Photo URL:', studentInfo.photo);
+        setIsDownloading(false);
+        alert('Failed to load photo. Please try again.');
       };
       img.src = studentInfo.photo;
     } else {
