@@ -55,63 +55,60 @@ const IDCardPreviewPage: React.FC = () => {
       return;
     }
 
-    // Set high resolution with correct proportions (matching browser preview)
+    // Set high resolution
     const scale = 3;
-    // 調整為標準信用卡比例 (85.6mm x 53.98mm) 約 3.375:2.125
-    const cardWidth = 320;
-    const cardHeight = 200;
-    canvas.width = cardWidth * scale;
-    canvas.height = cardHeight * scale;
+    canvas.width = 350 * scale;
+    canvas.height = 560 * scale;
     ctx.scale(scale, scale);
 
     // White background
     ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, cardWidth, cardHeight);
+    ctx.fillRect(0, 0, 350, 560);
 
     // Main content area
     ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, cardWidth - 40, cardHeight);
+    ctx.fillRect(0, 0, 290, 560);
 
     // Side panel
-    const gradient = ctx.createLinearGradient(cardWidth - 40, 0, cardWidth, 0);
+    const gradient = ctx.createLinearGradient(290, 0, 350, 0);
     gradient.addColorStop(0, '#991b1b');
     gradient.addColorStop(1, '#7f1d1d');
     ctx.fillStyle = gradient;
-    ctx.fillRect(cardWidth - 40, 0, 40, cardHeight);
+    ctx.fillRect(290, 0, 60, 560);
 
     // School name header
     ctx.fillStyle = '#1f2937';
-    ctx.font = 'bold 16px Arial';
+    ctx.font = 'bold 20px Arial';
     ctx.textAlign = 'right';
-    ctx.fillText('GENTLE HIGH SCHOOL', cardWidth - 45, 25);
+    ctx.fillText('GENTLE HIGH SCHOOL', 280, 40);
 
     // Name section
     ctx.fillStyle = '#6b7280';
     ctx.font = '10px Arial';
     ctx.textAlign = 'left';
-    ctx.fillText('NAME', 20, 120);
+    ctx.fillText('NAME', 20, 200);
     
     // Name line
     ctx.strokeStyle = '#d1d5db';
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(20, 130);
-    ctx.lineTo(cardWidth - 50, 130);
+    ctx.moveTo(20, 210);
+    ctx.lineTo(270, 210);
     ctx.stroke();
     
     ctx.fillStyle = '#1f2937';
-    ctx.font = 'bold 14px Arial';
-    ctx.fillText(studentInfo.name, 20, 145);
+    ctx.font = 'bold 16px Arial';
+    ctx.fillText(studentInfo.name, 20, 230);
 
     // Optical ID section
     ctx.fillStyle = '#6b7280';
     ctx.font = '10px Arial';
-    ctx.fillText('OPTICAL ID', 20, 160);
+    ctx.fillText('OPTICAL ID', 20, 260);
     
     ctx.strokeStyle = '#d1d5db';
     ctx.beginPath();
-    ctx.moveTo(20, 170);
-    ctx.lineTo(cardWidth - 50, 170);
+    ctx.moveTo(20, 270);
+    ctx.lineTo(270, 270);
     ctx.stroke();
     
     const opticalId = studentInfo.birthday ? 
@@ -119,38 +116,38 @@ const IDCardPreviewPage: React.FC = () => {
       '20240101';
     
     ctx.fillStyle = '#1f2937';
-    ctx.font = 'bold 14px Arial';
-    ctx.fillText(opticalId, 20, 185);
+    ctx.font = 'bold 16px Arial';
+    ctx.fillText(opticalId, 20, 290);
 
     // Year and Optical
     ctx.fillStyle = '#dc2626';
-    ctx.font = 'bold 24px Arial';
-    ctx.fillText('2024', 20, 120);
+    ctx.font = 'bold 32px Arial';
+    ctx.fillText('2024', 20, 450);
     
-    ctx.font = 'bold 14px Arial';
-    ctx.fillText('OPTICAL', 20, 140);
+    ctx.font = 'bold 18px Arial';
+    ctx.fillText('OPTICAL', 20, 480);
 
     // School badge
     ctx.strokeStyle = '#9ca3af';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(cardWidth - 60, 100, 15, 0, Math.PI * 2);
+    ctx.arc(250, 450, 25, 0, Math.PI * 2);
     ctx.stroke();
     
     ctx.fillStyle = '#f9fafb';
     ctx.fill();
     
     ctx.fillStyle = '#4b5563';
-    ctx.font = 'bold 10px Arial';
+    ctx.font = 'bold 12px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText('GHS', cardWidth - 60, 105);
+    ctx.fillText('GHS', 250, 455);
 
     // Side panel text
     ctx.save();
-    ctx.translate(cardWidth - 20, cardHeight / 2);
+    ctx.translate(320, 280);
     ctx.rotate(Math.PI / 2);
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 10px Arial';
+    ctx.font = 'bold 12px Arial';
     ctx.textAlign = 'center';
     ctx.fillText('GENTLE HIGH SCHOOL', 0, 0);
     ctx.restore();
@@ -162,9 +159,9 @@ const IDCardPreviewPage: React.FC = () => {
         console.log('Photo loaded successfully:', img.width, 'x', img.height);
         // Draw photo with proper aspect ratio
         const photoX = 20;
-        const photoY = 50;
-        const photoWidth = 60;
-        const photoHeight = 60;
+        const photoY = 20;
+        const photoWidth = 100;
+        const photoHeight = 130;
         
         const imgAspect = img.width / img.height;
         const targetAspect = photoWidth / photoHeight;
@@ -258,10 +255,10 @@ const IDCardPreviewPage: React.FC = () => {
           </p>
 
           {/* ID Card Preview */}
-          <div className="bg-white rounded-xl overflow-hidden shadow-xl border-2 border-gray-200 hover:scale-105 transition-transform duration-300 mb-8">
-            <div className="flex h-80">
-              <div className="flex-1 p-4 flex flex-col">
-                <div className="w-full h-32 bg-gray-100 rounded-lg overflow-hidden border border-gray-300 mb-4">
+          <div className="bg-white rounded-xl overflow-hidden shadow-xl border-2 border-gray-200 hover:scale-105 transition-transform duration-300 mb-8 mx-auto" style={{width: '280px', height: '448px'}}>
+            <div className="flex h-full">
+              <div className="p-4 flex flex-col" style={{width: '232px'}}>
+                <div className="w-20 h-26 bg-gray-100 rounded-lg overflow-hidden border border-gray-300 mb-4" style={{width: '80px', height: '104px'}}>
                   {studentInfo.photo ? (
                     <img src={studentInfo.photo} alt="Student" className="w-full h-full object-cover" />
                   ) : (
@@ -289,11 +286,11 @@ const IDCardPreviewPage: React.FC = () => {
                 
                 <div className="flex justify-between items-end mt-4">
                   <div>
-                    <div className="text-xl font-bold text-red-600">2024</div>
-                    <div className="text-xs text-red-600 font-medium">OPTICAL</div>
+                    <div className="text-2xl font-bold text-red-600">2024</div>
+                    <div className="text-sm text-red-600 font-medium">OPTICAL</div>
                   </div>
                   
-                  <div className="w-10 h-10 border-2 border-gray-400 rounded-full flex items-center justify-center bg-gray-50">
+                  <div className="w-12 h-12 border-2 border-gray-400 rounded-full flex items-center justify-center bg-gray-50">
                     <div className="text-xs text-center text-gray-600 font-bold leading-tight">
                       <div>GHS</div>
                     </div>
@@ -301,7 +298,7 @@ const IDCardPreviewPage: React.FC = () => {
                 </div>
               </div>
               
-              <div className="w-12 bg-gradient-to-b from-red-700 to-red-900 flex items-center justify-center">
+              <div className="w-15 bg-gradient-to-b from-red-700 to-red-900 flex items-center justify-center" style={{width: '48px'}}>
                 <div className="text-white text-xs font-bold transform rotate-90 whitespace-nowrap tracking-wider">
                   GENTLE HIGH SCHOOL
                 </div>
