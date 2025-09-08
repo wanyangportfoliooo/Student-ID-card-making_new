@@ -201,7 +201,7 @@ const PhotoCapturePage: React.FC = () => {
               <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
                 <span className="text-white text-xs font-bold">GM</span>
               </div>
-              <button onClick={handleBack} className="text-gray-600 hover:text-black transition-colors">
+              <button onClick={handleBack} className="text-gray-600 hover:text-black transition-colors" aria-label="Go back to previous page">
                 <ArrowLeft className="w-6 h-6" />
               </button>
             </div>
@@ -261,7 +261,7 @@ const PhotoCapturePage: React.FC = () => {
             <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
               <span className="text-white text-xs font-bold">GM</span>
             </div>
-            <button onClick={handleBack} className="text-gray-600 hover:text-black transition-colors">
+            <button onClick={handleBack} className="text-gray-600 hover:text-black transition-colors" aria-label="Go back to previous page">
               <ArrowLeft className="w-6 h-6" />
             </button>
           </div>
