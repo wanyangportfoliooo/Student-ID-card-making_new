@@ -1,0 +1,289 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Camera, ArrowLeft, RefreshCw } from 'lucide-react';
+
+const PhotoCapturePage: React.FC = () => {
+  const navigate = useNavigate();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string>('');
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
+
+  // Initialize camera when component mounts
+  useEffect(() => {
+    startCamera();
+    return () => {
+      stopCamera();
+    };
+  }, [facingMode]);
+
+  const startCamera = async () => {
+    try {
+      setIsLoading(true);
+      setError('');
+
+      // Check if getUserMedia is supported
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('Camera API not supported in this browser');
+      }
+
+      // Stop any existing stream
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
+
+      // Request camera access
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+          facingMode: facingMode
+        }
+      });
+
+      streamRef.current = stream;
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play();
+      }
+
+      setIsLoading(false);
+    } catch (err) {
+      console.error('Camera error:', err);
+      setIsLoading(false);
+      
+      if (err instanceof Error) {
+        if (err.name === 'NotAllowedError') {
+          setError('Camera access denied. You can upload a photo instead.');
+        } else if (err.name === 'NotFoundError') {
+          setError('No camera found. Please upload a photo instead.');
+        } else {
+          setError('Camera unavailable. Please upload a photo instead.');
+        }
+      }
+    }
+  };
+
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current || !canvasRef.current) return;
+
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+
+    if (!context) return;
+
+    // Set canvas dimensions to match video
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Draw the current video frame to canvas
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Convert to base64 image
+    const imageData = canvas.toDataURL('image/jpeg', 0.8);
+    
+    // Store photo in sessionStorage and navigate to next page
+    sessionStorage.setItem('capturedPhoto', imageData);
+    navigate('/PersonalInformation');
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      if (result) {
+        stopCamera();
+        sessionStorage.setItem('capturedPhoto', result);
+        navigate('/PersonalInformation');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const toggleCamera = () => {
+    setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
+  };
+
+  const triggerFileUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleBack = () => {
+    navigate('/LandingPage');
+  };
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-4 sm:p-6">
+        <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl overflow-hidden">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileUpload}
+            style={{ display: 'none' }}
+          />
+          
+          {/* Header */}
+          <div className="bg-white p-4 sm:p-6 border-b border-gray-100">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+                <span className="text-white text-xs font-bold">GM</span>
+              </div>
+              <button onClick={handleBack} className="text-gray-600 hover:text-black transition-colors">
+                <ArrowLeft className="w-6 h-6" />
+              </button>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-black mb-2">GENTLE MONSTER</h1>
+          </div>
+
+          {/* Main Content */}
+          <div className="p-6 sm:p-8 text-center">
+            <Camera className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-6 text-red-400" />
+            <h2 className="text-2xl sm:text-3xl font-bold text-black mb-4">Camera Error</h2>
+            <p className="text-gray-600 mb-8 leading-relaxed">{error}</p>
+            
+            <div className="space-y-4">
+              <button
+                onClick={triggerFileUpload}
+                className="w-full bg-blue-600 text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-blue-700 transition-colors duration-200"
+              >
+                📁 Upload Photo Instead
+              </button>
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={startCamera}
+                  className="flex-1 bg-gray-200 text-black py-3 px-4 rounded-xl font-medium hover:bg-gray-300 transition-colors duration-200"
+                >
+                  Try Again
+                </button>
+                <button
+                  onClick={handleBack}
+                  className="flex-1 bg-gray-600 text-white py-3 px-4 rounded-xl font-medium hover:bg-gray-700 transition-colors duration-200"
+                >
+                  Go Back
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-4 sm:p-6">
+      <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl overflow-hidden">
+        <canvas ref={canvasRef} style={{ display: 'none' }} />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileUpload}
+          style={{ display: 'none' }}
+        />
+        
+        {/* Header */}
+        <div className="bg-white p-4 sm:p-6 border-b border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+              <span className="text-white text-xs font-bold">GM</span>
+            </div>
+            <button onClick={handleBack} className="text-gray-600 hover:text-black transition-colors">
+              <ArrowLeft className="w-6 h-6" />
+            </button>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-black mb-2">GENTLE MONSTER</h1>
+        </div>
+
+        {/* Main Content */}
+        <div className="p-6 sm:p-8 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-black mb-6">
+            PHOTO CAPTURE
+          </h2>
+          
+          <p className="text-gray-600 mb-8 leading-relaxed">
+            Take a photo or upload an image for your student ID card.
+          </p>
+
+          {/* Camera View */}
+          <div className="relative aspect-square bg-gray-900 rounded-xl overflow-hidden mb-8">
+            {isLoading ? (
+              <div className="absolute inset-0 flex items-center justify-center text-white">
+                <div className="text-center">
+                  <Camera className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 animate-pulse" />
+                  <p className="text-sm sm:text-base">Starting camera...</p>
+                </div>
+              </div>
+            ) : (
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full h-full object-cover"
+              />
+            )}
+            
+            {/* Camera Controls Overlay */}
+            <div className="absolute top-4 right-4 flex gap-2">
+              <button 
+                onClick={triggerFileUpload} 
+                className="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center"
+              >
+                <span className="text-white text-sm">📁</span>
+              </button>
+              <button 
+                onClick={toggleCamera} 
+                className="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center"
+              >
+                <RefreshCw className="w-4 h-4 text-white" />
+              </button>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="space-y-4">
+            <button
+              onClick={capturePhoto}
+              disabled={isLoading}
+              className="w-full bg-black text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-gray-900 transition-colors duration-200 disabled:opacity-50"
+            >
+              {isLoading ? 'Starting Camera...' : 'Capture Photo'}
+            </button>
+            
+            <button
+              onClick={triggerFileUpload}
+              className="w-full bg-gray-200 text-black py-3 px-6 rounded-xl font-medium hover:bg-gray-300 transition-colors duration-200"
+            >
+              📁 Upload Photo Instead
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PhotoCapturePage;
