@@ -9,29 +9,29 @@ const LandingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-4 sm:p-6">
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center p-4 sm:p-6">
+      <div className="max-w-md w-full bg-pink-50 rounded-3xl shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="bg-white p-4 sm:p-6 border-b border-gray-100">
+        <div className="bg-pink-50 p-4 sm:p-6 border-b border-pink-200">
           <div className="flex items-center justify-between mb-4">
-            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
               <span className="text-white text-xs font-bold">GM</span>
             </div>
             <div className="flex gap-2">
-              <div className="w-4 h-4 sm:w-6 sm:h-6 bg-gray-300 rounded"></div>
-              <div className="w-4 h-4 sm:w-6 sm:h-6 bg-gray-300 rounded"></div>
+              <div className="w-4 h-4 sm:w-6 sm:h-6 bg-pink-300 rounded"></div>
+              <div className="w-4 h-4 sm:w-6 sm:h-6 bg-pink-300 rounded"></div>
             </div>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-black mb-2">GENTLE MONSTER</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-pink-800 mb-2">GENTLE MONSTER</h1>
         </div>
 
         {/* Main Content */}
         <div className="p-6 sm:p-8 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-black mb-4 sm:mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-pink-800 mb-4 sm:mb-6">
             AI STUDENT ID CARD
           </h2>
           
-          <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8 leading-relaxed">
+          <p className="text-sm sm:text-base text-pink-600 mb-6 sm:mb-8 leading-relaxed">
             Gentle Monster's 2024 Optical Collection invites you to dive 
             into the Gentle High School experience. Start your student 
             life at Gentle High School by obtaining your AI student ID.

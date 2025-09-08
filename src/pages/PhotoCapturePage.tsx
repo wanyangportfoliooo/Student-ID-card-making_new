@@ -187,8 +187,8 @@ const PhotoCapturePage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-4 sm:p-6">
-        <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center p-4 sm:p-6">
+        <div className="max-w-md w-full bg-pink-50 rounded-3xl shadow-2xl overflow-hidden">
           <input
             ref={fileInputRef}
             type="file"
@@ -198,23 +198,23 @@ const PhotoCapturePage: React.FC = () => {
           />
           
           {/* Header */}
-          <div className="bg-white p-4 sm:p-6 border-b border-gray-100">
+          <div className="bg-pink-50 p-4 sm:p-6 border-b border-pink-200">
             <div className="flex items-center justify-between mb-4">
-              <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                <span className="text-white text-xs font-bold">GM</span>
-              </div>
-              <button onClick={handleBack} className="text-gray-600 hover:text-black transition-colors" aria-label="Go back to previous page">
+              <button onClick={handleBack} className="text-pink-600 hover:text-pink-800 transition-colors" aria-label="Go back to previous page">
                 <ArrowLeft className="w-6 h-6" />
               </button>
+              <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-xs font-bold">GM</span>
+              </div>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-black mb-2">GENTLE MONSTER</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-pink-800 mb-2">GENTLE MONSTER</h1>
           </div>
 
           {/* Main Content */}
           <div className="p-6 sm:p-8 text-center">
-            <Camera className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-6 text-red-400" />
-            <h2 className="text-2xl sm:text-3xl font-bold text-black mb-4">Camera Error</h2>
-            <p className="text-gray-600 mb-8 leading-relaxed">{error}</p>
+            <Camera className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-6 text-pink-400" />
+            <h2 className="text-2xl sm:text-3xl font-bold text-pink-800 mb-4">Camera Error</h2>
+            <p className="text-pink-600 mb-8 leading-relaxed">{error}</p>
             
             <div className="space-y-4">
               <button
@@ -246,8 +246,8 @@ const PhotoCapturePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-4 sm:p-6">
-      <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center p-4 sm:p-6">
+      <div className="max-w-md w-full bg-pink-50 rounded-3xl shadow-2xl overflow-hidden">
         <canvas ref={canvasRef} style={{ display: 'none' }} />
         <input
           ref={fileInputRef}
@@ -258,25 +258,25 @@ const PhotoCapturePage: React.FC = () => {
         />
         
         {/* Header */}
-        <div className="bg-white p-4 sm:p-6 border-b border-gray-100">
+        <div className="bg-pink-50 p-4 sm:p-6 border-b border-pink-200">
           <div className="flex items-center justify-between mb-4">
-            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-              <span className="text-white text-xs font-bold">GM</span>
-            </div>
-            <button onClick={handleBack} className="text-gray-600 hover:text-black transition-colors" aria-label="Go back to previous page">
+            <button onClick={handleBack} className="text-pink-600 hover:text-pink-800 transition-colors" aria-label="Go back to previous page">
               <ArrowLeft className="w-6 h-6" />
             </button>
+            <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
+              <span className="text-white text-xs font-bold">GM</span>
+            </div>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-black mb-2">GENTLE MONSTER</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-pink-800 mb-2">GENTLE MONSTER</h1>
         </div>
 
         {/* Main Content */}
         <div className="p-6 sm:p-8 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-black mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-pink-800 mb-6">
             PHOTO CAPTURE
           </h2>
           
-          <p className="text-gray-600 mb-8 leading-relaxed">
+          <p className="text-pink-600 mb-8 leading-relaxed">
             Take a photo or upload an image for your student ID card.
           </p>
 
