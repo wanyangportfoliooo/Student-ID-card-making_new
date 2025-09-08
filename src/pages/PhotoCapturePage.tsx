@@ -21,13 +21,6 @@ const PhotoCapturePage: React.FC = () => {
     };
   }, [facingMode]);
 
-  // Restart camera when retaking photo
-  useEffect(() => {
-    if (capturedImage === null && !isLoading) {
-      console.log('capturedImage is null, restarting camera...');
-      startCamera();
-    }
-  }, [capturedImage, isLoading]);
 
   const startCamera = async () => {
     try {
@@ -179,6 +172,11 @@ const PhotoCapturePage: React.FC = () => {
     stopCamera();
     // 清除預覽圖片
     setCapturedImage(null);
+    // 等待一下再重新啟動相機
+    setTimeout(() => {
+      console.log('Restarting camera after retake...');
+      startCamera();
+    }, 200);
   };
 
   if (error) {
