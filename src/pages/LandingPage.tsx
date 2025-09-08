@@ -41,7 +41,7 @@ const LandingPage: React.FC = () => {
             onClick={handleStartClick}
             className="w-full bg-pink-500 text-white py-3 sm:py-4 px-6 rounded-none font-medium text-base sm:text-lg hover:bg-pink-600 transition-colors duration-200 mb-6 sm:mb-8"
           >
-            Receive your AI Student ID
+            獲取你的 AI 學生證
           </button>
 
           {/* Phone Mockup - Responsive */}

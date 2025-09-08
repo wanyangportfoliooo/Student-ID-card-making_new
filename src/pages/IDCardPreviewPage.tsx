@@ -345,7 +345,7 @@ const IDCardPreviewPage: React.FC = () => {
               }`}
             >
               <Download className="w-5 h-5 inline mr-2" />
-              {isDownloading ? 'Generating...' : 'Download Student ID'}
+              {isDownloading ? '生成中...' : '下載學生證'}
             </button>
             
             {isDownloading && (
@@ -357,9 +357,9 @@ const IDCardPreviewPage: React.FC = () => {
             <div className="flex gap-3">
               <button
                 onClick={handleBack}
-                className="flex-1 bg-gray-200 text-black py-3 px-4 rounded-xl font-medium hover:bg-gray-300 transition-colors duration-200"
+                className="flex-1 bg-pink-200 text-pink-800 py-3 px-4 rounded-xl font-medium hover:bg-pink-300 transition-colors duration-200"
               >
-                Edit Information
+                編輯資料
               </button>
               
               <button
@@ -367,7 +367,7 @@ const IDCardPreviewPage: React.FC = () => {
                 className="flex-1 bg-gray-600 text-white py-3 px-4 rounded-xl font-medium hover:bg-gray-700 transition-colors duration-200 flex items-center justify-center gap-2"
               >
                 <RotateCcw className="w-4 h-4" />
-                Start Over
+                重新開始
               </button>
             </div>
           </div>

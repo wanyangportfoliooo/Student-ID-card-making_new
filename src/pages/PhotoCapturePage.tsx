@@ -221,21 +221,21 @@ const PhotoCapturePage: React.FC = () => {
                 onClick={triggerFileUpload}
                 className="w-full bg-pink-500 text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-pink-600 transition-colors duration-200"
               >
-                📁 Upload Photo Instead
+                📁 從相簿選擇
               </button>
               
               <div className="flex gap-3">
                 <button
                   onClick={startCamera}
-                  className="flex-1 bg-gray-200 text-black py-3 px-4 rounded-xl font-medium hover:bg-gray-300 transition-colors duration-200"
+                  className="flex-1 bg-pink-200 text-pink-800 py-3 px-4 rounded-xl font-medium hover:bg-pink-300 transition-colors duration-200"
                 >
-                  Try Again
+                  重試
                 </button>
                 <button
                   onClick={handleBack}
                   className="flex-1 bg-gray-600 text-white py-3 px-4 rounded-xl font-medium hover:bg-gray-700 transition-colors duration-200"
                 >
-                  Go Back
+                  返回
                 </button>
               </div>
             </div>
@@ -304,16 +304,16 @@ const PhotoCapturePage: React.FC = () => {
                 <div className="absolute bottom-4 left-4 right-4 flex gap-2">
                   <button 
                     onClick={retakePhoto}
-                    className="flex-1 bg-gray-600/80 text-white py-2 px-4 rounded-lg font-medium hover:bg-gray-700/80 transition-colors"
+                    className="flex-1 bg-pink-200/80 text-pink-800 py-2 px-4 rounded-lg font-medium hover:bg-pink-300/80 transition-colors"
                   >
-                    Retake
+                    重新拍攝
                   </button>
                   <button 
                     onClick={confirmPhoto}
                     className="flex-1 bg-green-600/80 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-700/80 transition-colors"
                   >
                     <Check className="w-4 h-4 inline mr-1" />
-                    Confirm
+                    確認
                   </button>
                 </div>
               </div>
@@ -368,14 +368,14 @@ const PhotoCapturePage: React.FC = () => {
                 disabled={isLoading}
                 className="w-full bg-pink-500 text-white py-4 px-6 rounded-none font-medium text-lg hover:bg-pink-600 transition-colors duration-200 disabled:opacity-50"
               >
-                {isLoading ? 'Starting Camera...' : 'Capture Photo'}
+                {isLoading ? '啟動相機中...' : '拍照'}
               </button>
               
               <button
                 onClick={triggerFileUpload}
-                className="w-full bg-gray-200 text-black py-3 px-6 rounded-xl font-medium hover:bg-gray-300 transition-colors duration-200"
+                className="w-full bg-pink-200 text-pink-800 py-3 px-6 rounded-xl font-medium hover:bg-pink-300 transition-colors duration-200"
               >
-                📁 Upload Photo Instead
+                📁 從相簿選擇
               </button>
             </div>
           )}

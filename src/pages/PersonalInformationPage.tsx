@@ -101,7 +101,7 @@ const PersonalInformationPage: React.FC = () => {
                 !canProceed ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >
-              Continue to Student ID
+              繼續到學生證
             </button>
             
             {!canProceed && (
