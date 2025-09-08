@@ -17,7 +17,9 @@ const PhotoCapturePage: React.FC = () => {
 
   // Initialize camera when component mounts
   useEffect(() => {
-    startCamera();
+    startCamera().catch(err => {
+      console.error('Failed to start camera on mount:', err);
+    });
     return () => {
       stopCamera();
     };
@@ -66,9 +68,11 @@ const PhotoCapturePage: React.FC = () => {
             return;
           }
 
-          videoRef.current.onloadedmetadata = () => {
+          const video = videoRef.current;
+          
+          video.onloadedmetadata = () => {
             console.log('Video metadata loaded');
-            videoRef.current?.play().then(() => {
+            video.play().then(() => {
               console.log('Video playing successfully');
               setIsLoading(false);
               resolve();
@@ -79,11 +83,20 @@ const PhotoCapturePage: React.FC = () => {
             });
           };
 
-          videoRef.current.onerror = (err) => {
+          video.onerror = (err) => {
             console.error('Video error:', err);
             setIsLoading(false);
             reject(err);
           };
+
+          // Add timeout to prevent hanging
+          setTimeout(() => {
+            if (video.readyState === 0) {
+              console.error('Video loading timeout');
+              setIsLoading(false);
+              reject(new Error('Video loading timeout'));
+            }
+          }, 10000);
         });
       } else {
         setIsLoading(false);
