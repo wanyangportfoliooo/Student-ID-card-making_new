@@ -335,7 +335,7 @@ const PhotoCapturePage: React.FC = () => {
                     playsInline
                     muted
                     className="w-full h-full object-cover"
-                    style={{ WebkitPlaysinline: 'true' }}
+                    style={{ WebkitPlaysinline: 'true' } as React.CSSProperties}
                   />
                 )}
                 
